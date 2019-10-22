@@ -9,7 +9,7 @@ function Item(title, src) {
 }
 
 Item.roundCtr = 0;
-Item.roundLimit = 10;
+Item.roundLimit = 25;
 
 Item.all = [];
 
@@ -34,7 +34,9 @@ var paths = ['img/bag.jpg', 'img/banana.jpg', 'img/bathroom.jpg', 'img/boots.jpg
 for (var i = 0 ; i < names.length; i++) {
   new Item(names[i], paths[i]);
 }
-
+document.getElementById('clear'),addEventListener('click', function(){
+  localStorage.clear();
+});
 function renderNewItems() {
   // ensure that previous Item not shown on next round
   // var forbidden = [Item.leftObject, Item.rightObject, Item.middleObject];
