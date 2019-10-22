@@ -1,0 +1,40 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background:linear-gradient(to bottom left, blue, #fff) ;
+  text-align: center;
+  font-family: 'Righteous', sans-serif;
+
+}
+
+section div {
+  width: 200px;
+  /* float: left; */
+  display: inline-block;
+  padding: 30px;
+}
+
+section div img {
+  max-width: 200px;
+  height: 200px;
+  border: 2px solid rgb(50, 37, 97);
+  border-radius: 5px;
+}
+#list{
+  display: block;
+}
+table {
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid black;
+  padding: 3px 10px;
+}
+
+#myChart{
+  width:50%;
+  height: 50%;
+}
