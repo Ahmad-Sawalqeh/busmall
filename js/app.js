@@ -34,13 +34,13 @@ var paths = ['img/bag.jpg', 'img/banana.jpg', 'img/bathroom.jpg', 'img/boots.jpg
 for (var i = 0 ; i < names.length; i++) {
   new Item(names[i], paths[i]);
 }
-document.getElementById('clear'),addEventListener('click', function(){
+document.getElementById('clear').addEventListener('click', function(){
   localStorage.clear();
 });
 function renderNewItems() {
-  // ensure that previous Item not shown on next round
-  // var forbidden = [Item.leftObject, Item.rightObject, Item.middleObject];
-  var forbidden = [];
+  // ensure that previous Item not shown on next round also not in the current round
+  var forbidden = [Item.leftObject, Item.rightObject, Item.middleObject];
+  // var forbidden = [];
   do {
     Item.leftObject = getRandomItem();
   } while (forbidden.includes(Item.leftObject))
@@ -90,7 +90,7 @@ function randomInRange(min, max) {
   return rand;
 }
 
-function updateTotals() {
+function createListElement() {
   var list = document.getElementById('list');
     for (var j = 0; j < Item.all.length; j++) {
       var li = document.createElement('li');
@@ -99,69 +99,31 @@ function updateTotals() {
     }
 }
 /************************************************* */
-function updateItems() {
-  console.log("inside updateItems");
-  var ItemsString = JSON.stringify(Item.all);
-  localStorage.setItem('orders', ItemsString);
-}
 
-//get all drinks
-function getStorage() {
-  console.log("inside getStorage");
-  var data = localStorage.getItem('orders');
-  var ItemsData = JSON.parse(data);
-  if (ItemsData) {
-    for (let i = 0; i < ItemsData.length; i++) {
-      var rawItemObject = ItemsData[i];
-      new Item(
-        rawItemObject.title,
-        rawItemObject.src,
-        rawItemObject.clickCtr,
-        rawItemObject.shownCtr,
-      );
-    }
-    renderNewItems();
-    // updateTotals();
-  }
-  // console.log('local Storage Data', ItemsData);
-}
 /**************************************************/
 
-renderNewItems();
 // getStorage();
 // localStorage.removeItem('order');
 function clickHandler(event) {
-
+  
   var clickedId = event.target.id;
   var imgClicked;
-
-  if(clickedId === 'left-image') {
-    imgClicked = Item.leftObject;
-  } else if (clickedId === 'right-image') {
-    imgClicked = Item.rightObject;
-  } else if (clickedId === 'middle-image') {
-    imgClicked = Item.middleObject;
-  }
-
+  // setStorage();
+  
+  if(clickedId === 'left-image') {imgClicked = Item.leftObject;}
+  else if (clickedId === 'right-image') {imgClicked = Item.rightObject;}
+  else if (clickedId === 'middle-image') {imgClicked = Item.middleObject;}
+  
   if(imgClicked) {
     imgClicked.clickCtr++;
-    Item.roundCtr++;
-
-    
-
-    if(Item.roundCtr === Item.roundLimit) {
-
-      alert('No more clicking for you!');
-
+    Item.roundCtr++;  
+    if(Item.roundCtr === Item.roundLimit) {      
+      alert('No more clicking for you!');      
       Item.container.removeEventListener('click', clickHandler);
-
-      updateTotals();
-      updateItems();
-      // getStorage();
-      // updateItems()
-
-      // makeAItemChart();
-
+      getStorage()
+      setStorage();
+      createListElement();
+      // makeAItemChart();      
     } else {
 
       renderNewItems();
@@ -169,10 +131,40 @@ function clickHandler(event) {
   }
 }
 
+function setStorage() {
+  localStorage.setItem('orders', JSON.stringify(Item.all));
+}
+
+//get all drinks
+function getStorage() {
+  var ItemsString = localStorage.getItem('orders');
+  // console.log("ItemsString= "+ ItemsString);
+  if (ItemsString) {
+   var rowOfObjectsArray = JSON.parse(ItemsString);
+  //  console.log(getStoredProducts);
+  Item.all = rowOfObjectsArray;
+  createListElement();
+  // console.log("rowOfObjectsArray= "+ rowOfObjectsArray);
+    // for (let i = 0; i < ItemsString.length; i++) {
+    //   var rawItemObject = ItemsString[i];
+    //   new Item(
+    //     rawItemObject.title,
+    //     rawItemObject.src,
+    //     rawItemObject.clickCtr,
+    //     rawItemObject.shownCtr,
+    //   );
+    // }
+    // renderNewItems();
+    // createListElement();
+  }
+  // console.log('local Storage Data', ItemsString);
+}
+
 // Notice that we're attaching event listener to the container, 
 // but event.target will allow us to which child element was actually clicked
 Item.container.addEventListener('click', clickHandler);
 
+renderNewItems();
 getStorage();
 
 
