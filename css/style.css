@@ -1,4 +1,67 @@
-* {
+*{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+  font-family: 'Righteous', sans-serif;
+}
+
+body {
+  background:linear-gradient(to bottom left, blue, #fff) ;   
+}
+#container{
+  text-align: center;
+  display: inline-block;
+  margin-left:50px;
+}
+header{  
+  text-align: center;
+}
+h1{
+  text-transform: capitalize;
+  letter-spacing: 3px;
+  word-spacing: 30px;
+  font-size: 60px;
+  padding:10px 30px;
+}
+section div {
+  float: left;
+  margin: 20px;
+}
+
+section div img {
+  min-width: 200px;
+  max-width: 200px;
+  height: 200px;
+  border: 3px solid rgb(50, 37, 97);
+  border-radius: 15px;
+}
+section:last-child{
+  width: 60%;
+  height: 40%;
+}
+.styleList{
+  float: right;
+  margin-right:70px;
+}
+#list{
+  list-style-type: none;
+  /* border: 2px solid black; */
+  border-radius: 5px;
+  margin:0 30px;
+}
+li{
+  padding: 5px;
+}
+
+span{
+  color: red;
+}
+
+
+
+
+
+/* * {
   box-sizing: border-box;
 }
 
@@ -34,4 +97,4 @@ table, th, td {
 #myChart{
   width:50%;
   height: 50%;
-}
+} */
