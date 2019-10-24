@@ -38,7 +38,7 @@ for (var i = 0 ; i < names.length; i++) {
 }
 
 Item.container.addEventListener('click', clickHandler);
-clearLocalStorageButton.addEventListener('click', clearLocalStorage);
+// clearLocalStorageButton.addEventListener('click', clearLocalStorage);
 
 getStorage();
 renderNewImages();
@@ -59,7 +59,7 @@ function createListElement() {
   list.innerHTML = '';
   for (var j = 0; j < Item.all.length; j++) {
     var li = document.createElement('li');
-    li.textContent = Item.all[j].title + ' was clicked ' + Item.all[j].clickCtr + ' and was shown ' + Item.all[j].shownCtr + ' times';
+    li.textContent = Item.all[j].title + ' had ' + Item.all[j].clickCtr + ' votes and was shown ' + Item.all[j].shownCtr + ' times';
     list.appendChild(li);
   }
 }
@@ -80,13 +80,23 @@ function getStorage() {
 function clearLocalStorage(){
   localStorage.clear();
   list.innerHTML = '';
-  Item.container.addEventListener('click', clickHandler);
+  Item.container.removeEventListener('click', clickHandler);
+  clearLocalStorageButton.removeAttribute('style');
+  clearLocalStorageButton.removeEventListener('click', clearLocalStorage);
 }
 
 function renderNewImages() {
   // ensure that previous Item not shown on next round also not in the current round
   var forbidden = [Item.leftObject, Item.rightObject, Item.middleObject];
   // var forbidden = [];
+  // for (var forbiddenObject = 0 ; forbiddenObject < 3 ; forbiddenObject++){
+  //   do {
+  //     forbidden[forbiddenObject] = getRandomItem();
+  //   } while (forbidden.includes(forbidden[forbiddenObject]))
+  //   forbidden.push(forbidden[forbiddenObject]);
+  // } 
+
+
   do {
     Item.leftObject = getRandomItem();
   } while (forbidden.includes(Item.leftObject))
@@ -103,9 +113,19 @@ function renderNewImages() {
   // add left Item to forbidden list so we don't double up
   forbidden.push(Item.middleObject);
   
-  Item.leftObject.shownCtr++;
-  Item.rightObject.shownCtr++;
-  Item.middleObject.shownCtr++;
+
+
+
+
+  var shownObjectsArrayCtr = [Item.leftObject, Item.rightObject, Item.middleObject];
+  for(var i = 0 ; i < shownObjectsArrayCtr.length ; i++){
+    shownObjectsArrayCtr[i].shownCtr++;
+  }
+  // Item.leftObject.shownCtr++;
+  // Item.rightObject.shownCtr++;
+  // Item.middleObject.shownCtr++;
+
+
 
   var leftItemImageElement = Item.leftImage;
   var rightItemImageElement = Item.rightImage;
@@ -141,7 +161,7 @@ function makeAItemChart(){
     type: 'bar',
     // The data for our dataset
     data: {
-      labels: ['bag', 'banana', 'bathroom', 'boots', 'breakfast', 'bubblegum', 'chair', 'cthulhu', 'dog-duck', 'dragon', 'pen', 'pet-sweep', 'scissors', 'shark', 'sweep', 'tauntaun', 'unicorn', 'usb', 'water-can', 'wine-glass'],
+      labels: names,
       datasets: [{
         label: 'Buss Mall Vote',
         backgroundColor: 'blue',
@@ -184,8 +204,8 @@ function clickHandler(event) {
     // createListElement();
     if(Item.roundCtr === Item.roundLimit) {      
       alert('You already clicked 25 times!\nPress OK to display the statistics of your choices');    
-
-      Item.container.removeEventListener('click', clickHandler);
+      addClearButton();
+      // Item.container.removeEventListener('click', clickHandler);
       createListElement();
       makeAItemChart();      
     } else {
@@ -194,6 +214,11 @@ function clickHandler(event) {
   }
 }
 
+function addClearButton(){
+  clearLocalStorageButton.setAttribute('style','opacity:1;cursor: pointer;');
+  clearLocalStorageButton.addEventListener('click', clearLocalStorage);
+  Item.container.removeEventListener('click', clickHandler);
+}
 
 // function addElement(tag, container, text) {
 //   var element = document.createElement(tag);
